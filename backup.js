@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import {ScrollView, Text, TextInput, View, Button, Alert } from 'react-native';
+import {ScrollView, Text, TextInput, View, Button } from 'react-native';
 import React, {useState} from 'react';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import NumericInput from 'react-native-numeric-input'
@@ -19,7 +19,7 @@ export default function App() {
   const [isEnabled, setIsEnabled] = useState(false);
   const [ResultColor, setResultColor] = useState('');
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+ 
   const [loaded] = useFonts({
     'Ubuntu-Light': require('./assets/fonts/Ubuntu-Regular.ttf')
   })
@@ -33,22 +33,10 @@ export default function App() {
     {label: 'Female', value: 'female'}
   ];
 
-  const ShowAlert = () => {
-    Alert.alert(
-      "Error", 
-      "Weight is empty or zero", 
-      [
-        {
-          text: "Ok"
-        }
-      ]
-    );
-  }
-
   function calculate() {
     setResultColor(isEnabled ? StyleSheet.darkfield : StyleSheet.lightfield)
-    if(weight === '' || weight < 0) {
-      ShowAlert()
+    if(weight === '' || weight === '0' || weight === '00' || weight === '000') {
+      setResult('Weight is empty or zero')
     }
     else {
       const liters = bottles * 0.33;
@@ -86,7 +74,8 @@ export default function App() {
   }
 
   return (
-      <ScrollView style={[isEnabled ? StyleSheet.bgcolordark : StyleSheet.bgcolorlight]}>
+    <View style={[isEnabled ? StyleSheet.bgcolordark : StyleSheet.bgcolorlight]}>
+      <ScrollView>
         <Text style={[isEnabled ? StyleSheet.darkfield : StyleSheet.lightfield, StyleSheet.alcoholmeter]}>Alcometer</Text>
         <View style={[isEnabled ? StyleSheet.darkfield : StyleSheet.lightfield, StyleSheet.switchColor]}>
               <Switch
@@ -143,7 +132,7 @@ export default function App() {
         </View>
         <StatusBar style="auto" />
       </ScrollView>
-
+    </View>
   );
 }
 
